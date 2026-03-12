@@ -1,0 +1,90 @@
+export const trafficData = [
+  { hour: '00:00', requests: 1240, blocked: 45, flagged: 23 },
+  { hour: '01:00', requests: 890,  blocked: 32, flagged: 18 },
+  { hour: '02:00', requests: 750,  blocked: 28, flagged: 15 },
+  { hour: '03:00', requests: 620,  blocked: 19, flagged: 10 },
+  { hour: '04:00', requests: 580,  blocked: 22, flagged: 12 },
+  { hour: '05:00', requests: 710,  blocked: 35, flagged: 20 },
+  { hour: '06:00', requests: 1450, blocked: 67, flagged: 41 },
+  { hour: '07:00', requests: 2300, blocked: 89, flagged: 55 },
+  { hour: '08:00', requests: 3420, blocked: 124, flagged: 78 },
+  { hour: '09:00', requests: 4150, blocked: 198, flagged: 112 },
+  { hour: '10:00', requests: 4890, blocked: 245, flagged: 143 },
+  { hour: '11:00', requests: 5120, blocked: 289, flagged: 167 },
+  { hour: '12:00', requests: 4750, blocked: 312, flagged: 189 },
+  { hour: '13:00', requests: 4980, blocked: 278, flagged: 156 },
+  { hour: '14:00', requests: 5340, blocked: 334, flagged: 201 },
+  { hour: '15:00', requests: 5680, blocked: 367, flagged: 223 },
+  { hour: '16:00', requests: 4920, blocked: 298, flagged: 178 },
+  { hour: '17:00', requests: 4560, blocked: 256, flagged: 145 },
+  { hour: '18:00', requests: 3890, blocked: 189, flagged: 112 },
+  { hour: '19:00', requests: 3240, blocked: 145, flagged: 89 },
+  { hour: '20:00', requests: 2780, blocked: 112, flagged: 67 },
+  { hour: '21:00', requests: 2340, blocked: 89,  flagged: 54 },
+  { hour: '22:00', requests: 1890, blocked: 67,  flagged: 39 },
+  { hour: '23:00', requests: 1450, blocked: 52,  flagged: 28 },
+]
+
+export const abuseTypes = [
+  { type: 'Rate Limit',          count: 1247 },
+  { type: 'Brute Force',         count: 389  },
+  { type: 'Bot Activity',        count: 756  },
+  { type: 'Scraping',            count: 521  },
+  { type: 'Cred. Stuffing',      count: 234  },
+  { type: 'Traffic Flooding',    count: 178  },
+]
+
+export const ipData = [
+  { id: 1,  ip: '45.33.32.156',       country: 'US', requests: 15420, failedLogins: 342, status: 'blocked', lastSeen: '2 min ago',  threat: 'critical' },
+  { id: 2,  ip: '192.241.206.164',    country: 'CN', requests: 8930,  failedLogins: 189, status: 'blocked', lastSeen: '5 min ago',  threat: 'high'     },
+  { id: 3,  ip: '185.220.101.35',     country: 'FR', requests: 12340, failedLogins: 567, status: 'blocked', lastSeen: '8 min ago',  threat: 'critical' },
+  { id: 4,  ip: '104.236.178.240',    country: 'RU', requests: 6754,  failedLogins: 0,   status: 'flagged', lastSeen: '12 min ago', threat: 'high'     },
+  { id: 5,  ip: '178.62.194.248',     country: 'DE', requests: 4321,  failedLogins: 56,  status: 'flagged', lastSeen: '18 min ago', threat: 'medium'   },
+  { id: 6,  ip: '82.221.105.22',      country: 'NL', requests: 3245,  failedLogins: 23,  status: 'flagged', lastSeen: '31 min ago', threat: 'medium'   },
+  { id: 7,  ip: '138.197.138.255',    country: 'SG', requests: 2567,  failedLogins: 78,  status: 'blocked', lastSeen: '45 min ago', threat: 'high'     },
+  { id: 8,  ip: '91.108.4.116',       country: 'KR', requests: 5678,  failedLogins: 134, status: 'flagged', lastSeen: '22 min ago', threat: 'medium'   },
+  { id: 9,  ip: '159.89.49.162',      country: 'CA', requests: 1893,  failedLogins: 12,  status: 'flagged', lastSeen: '1 hr ago',   threat: 'low'      },
+  { id: 10, ip: '10.0.0.142',         country: 'US', requests: 876,   failedLogins: 0,   status: 'clean',   lastSeen: '2 hr ago',   threat: 'none'     },
+]
+
+export const alertsData = [
+  { id: 1,  severity: 'critical', type: 'Brute Force Attack',    message: 'IP 45.33.32.156 made 342 failed login attempts in 10 minutes.',          time: '2 min ago',  resolved: false, endpoint: '/api/auth/login'   },
+  { id: 2,  severity: 'critical', type: 'DDoS Suspected',        message: 'Traffic spike: 5,680 req/min detected from IP 185.220.101.35.',          time: '8 min ago',  resolved: false, endpoint: '/api/products'     },
+  { id: 3,  severity: 'high',     type: 'Bot Activity',          message: 'Automated scraping detected from 104.236.178.240 via identical user agents.', time: '15 min ago', resolved: false, endpoint: '/api/data'         },
+  { id: 4,  severity: 'high',     type: 'Rate Limit Exceeded',   message: 'API key AK-7823 exceeded rate limit 47× in the past hour.',             time: '22 min ago', resolved: false, endpoint: '/api/search'       },
+  { id: 5,  severity: 'high',     type: 'Credential Stuffing',   message: 'Multiple accounts being tested sequentially from 192.241.206.164.',     time: '35 min ago', resolved: false, endpoint: '/api/auth/login'   },
+  { id: 6,  severity: 'medium',   type: 'Suspicious Payload',    message: 'Repeated identical POST payloads detected from 82.221.105.22.',         time: '48 min ago', resolved: true,  endpoint: '/api/orders'       },
+  { id: 7,  severity: 'medium',   type: 'Rate Limit Warning',    message: 'IP 178.62.194.248 approaching rate limit threshold (85%).',             time: '1 hr ago',   resolved: false, endpoint: '/api/users'        },
+  { id: 8,  severity: 'medium',   type: 'Geo-Anomaly',           message: 'Unusual traffic from unexpected region (KR) for account USR-4421.',     time: '1.5 hr ago', resolved: true,  endpoint: '/api/account'      },
+  { id: 9,  severity: 'low',      type: 'Slow Request Pattern',  message: 'Unusual slow-drip request pattern from 159.89.49.162.',                 time: '2 hr ago',   resolved: true,  endpoint: '/api/files'        },
+  { id: 10, severity: 'low',      type: 'User Agent Mismatch',   message: 'Inconsistent user agent strings detected from 91.108.4.116.',           time: '3 hr ago',   resolved: true,  endpoint: '/api/auth/login'   },
+]
+
+export const rulesData = [
+  { id: 1, name: 'Global Rate Limit',          description: 'Maximum requests per IP per minute across all endpoints.',          threshold: 100,  window: '1 minute',   action: 'throttle', enabled: true,  triggered: 1247 },
+  { id: 2, name: 'Login Brute Force Guard',     description: 'Block IPs that exceed the failed login attempts threshold.',        threshold: 10,   window: '5 minutes',  action: 'block',    enabled: true,  triggered: 389  },
+  { id: 3, name: 'API Key Rate Limit',          description: 'Per API key request limit to prevent key abuse.',                  threshold: 1000, window: '1 hour',     action: 'throttle', enabled: true,  triggered: 234  },
+  { id: 4, name: 'Payload Repeat Detection',    description: 'Flag IPs sending identical request payloads repeatedly.',          threshold: 20,   window: '5 minutes',  action: 'flag',     enabled: true,  triggered: 521  },
+  { id: 5, name: 'Traffic Spike Detection',     description: 'Detect sudden traffic bursts beyond the historical baseline.',     threshold: 300,  window: '1 minute',   action: 'alert',    enabled: true,  triggered: 178  },
+  { id: 6, name: 'Scraping Protection',         description: 'Identify and block automated scraping behavior.',                  threshold: 500,  window: '10 minutes', action: 'block',    enabled: false, triggered: 756  },
+  { id: 7, name: 'Credential Stuffing Guard',   description: 'Detect multiple account probing from a single IP address.',       threshold: 5,    window: '10 minutes', action: 'block',    enabled: true,  triggered: 167  },
+  { id: 8, name: 'Slow Drip Rate Detector',     description: 'Detect slow-drip attack patterns that evade standard limits.',    threshold: 1,    window: '10 seconds', action: 'flag',     enabled: false, triggered: 89   },
+]
+
+export const logsData = [
+  { id: 1,  timestamp: '15:42:31', ip: '45.33.32.156',    method: 'POST',   endpoint: '/api/auth/login',    status: 401, responseTime: 45,  country: 'US', userAgent: 'python-requests/2.28.0'  },
+  { id: 2,  timestamp: '15:42:29', ip: '104.236.178.240', method: 'GET',    endpoint: '/api/data/products', status: 429, responseTime: 12,  country: 'RU', userAgent: 'Mozilla/5.0 (scrapy)'    },
+  { id: 3,  timestamp: '15:42:28', ip: '10.0.0.45',       method: 'GET',    endpoint: '/api/users/profile', status: 200, responseTime: 89,  country: 'US', userAgent: 'Mozilla/5.0 Chrome/120'  },
+  { id: 4,  timestamp: '15:42:27', ip: '185.220.101.35',  method: 'GET',    endpoint: '/api/products',      status: 200, responseTime: 134, country: 'FR', userAgent: 'curl/7.85.0'             },
+  { id: 5,  timestamp: '15:42:26', ip: '192.241.206.164', method: 'POST',   endpoint: '/api/auth/login',    status: 403, responseTime: 23,  country: 'CN', userAgent: 'python-httpx/0.24.0'     },
+  { id: 6,  timestamp: '15:42:25', ip: '10.0.0.12',       method: 'PUT',    endpoint: '/api/orders/1234',   status: 200, responseTime: 245, country: 'US', userAgent: 'Mozilla/5.0 Firefox/119' },
+  { id: 7,  timestamp: '15:42:24', ip: '178.62.194.248',  method: 'GET',    endpoint: '/api/search',        status: 429, responseTime: 8,   country: 'DE', userAgent: 'Java/17.0.4'             },
+  { id: 8,  timestamp: '15:42:23', ip: '82.221.105.22',   method: 'POST',   endpoint: '/api/orders',        status: 400, responseTime: 67,  country: 'NL', userAgent: 'axios/1.4.0'             },
+  { id: 9,  timestamp: '15:42:22', ip: '10.0.0.89',       method: 'GET',    endpoint: '/api/dashboard',     status: 200, responseTime: 156, country: 'US', userAgent: 'Mozilla/5.0 Safari/17'   },
+  { id: 10, timestamp: '15:42:21', ip: '138.197.138.255', method: 'POST',   endpoint: '/api/auth/login',    status: 403, responseTime: 19,  country: 'SG', userAgent: 'python-requests/2.31.0'  },
+  { id: 11, timestamp: '15:42:20', ip: '91.108.4.116',    method: 'GET',    endpoint: '/api/users',         status: 200, responseTime: 203, country: 'KR', userAgent: 'Mozilla/5.0 Chrome/121'  },
+  { id: 12, timestamp: '15:42:19', ip: '159.89.49.162',   method: 'GET',    endpoint: '/api/files',         status: 200, responseTime: 312, country: 'CA', userAgent: 'Wget/1.21.3'             },
+  { id: 13, timestamp: '15:42:18', ip: '10.0.0.156',      method: 'DELETE', endpoint: '/api/sessions/789',  status: 204, responseTime: 78,  country: 'US', userAgent: 'Mozilla/5.0 Chrome/120'  },
+  { id: 14, timestamp: '15:42:17', ip: '45.33.32.156',    method: 'POST',   endpoint: '/api/auth/login',    status: 401, responseTime: 43,  country: 'US', userAgent: 'python-requests/2.28.0'  },
+  { id: 15, timestamp: '15:42:16', ip: '10.0.0.74',       method: 'GET',    endpoint: '/api/notifications', status: 200, responseTime: 91,  country: 'US', userAgent: 'Mozilla/5.0 Edge/120'    },
+]
