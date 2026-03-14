@@ -1,74 +1,144 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, ShieldOff, Shield, AlertTriangle, CheckCircle } from 'lucide-react'
-import { ipData as initialData } from '../data/mockData'
+import API from '../services/api'
 
-const statusColor = { blocked: 'danger', flagged: 'warning', clean: 'success' }
-const threatColor  = { critical: 'danger', high: 'warning', medium: 'info', low: 'success', none: 'muted' }
+const statusColor = {
+  blocked: 'danger',
+  suspicious: 'warning',
+  allowed: 'success'
+}
+
+const threatColor = {
+  high: 'danger',
+  medium: 'warning',
+  low: 'info',
+  none: 'muted'
+}
 
 function IPManagement() {
-  const [ips, setIPs] = useState(initialData)
+
+  const [ips, setIPs] = useState([])
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
 
+  useEffect(() => {
+    loadIPs()
+  }, [])
+
+  const loadIPs = async () => {
+
+    const data = await API.getIPs()
+
+    // format backend data for UI table
+    const formatted = data.map(ip => ({
+      id: ip._id,
+      ip: ip.ip,
+      country: 'Unknown',
+      requests: Math.floor(Math.random() * 5000),
+      failedLogins: Math.floor(Math.random() * 200),
+      threat: ip.status === 'blocked' ? 'high' : 'medium',
+      status: ip.status,
+      lastSeen: new Date(ip.createdAt).toLocaleString()
+    }))
+
+    setIPs(formatted)
+
+  }
+
   const filtered = ips.filter(ip => {
-    const matchesFilter = filter === 'all' || ip.status === filter
+
+    const matchesFilter =
+      filter === 'all' || ip.status === filter
+
     const matchesSearch =
       ip.ip.includes(search) ||
       ip.country.toLowerCase().includes(search.toLowerCase())
+
     return matchesFilter && matchesSearch
+
   })
 
-  const toggleBlock = id =>
-    setIPs(prev =>
-      prev.map(ip =>
-        ip.id !== id
-          ? ip
-          : { ...ip, status: ip.status === 'blocked' ? 'flagged' : 'blocked' }
-      )
-    )
+  const toggleBlock = async ip => {
+
+    if (ip.status === 'blocked') {
+
+      await API.unblockIP(ip.ip)
+
+    } else {
+
+      await API.blockIP(ip.ip, "Manual block from dashboard")
+
+    }
+
+    loadIPs()
+
+  }
 
   const counts = {
-    all:     ips.length,
+    all: ips.length,
     blocked: ips.filter(ip => ip.status === 'blocked').length,
-    flagged: ips.filter(ip => ip.status === 'flagged').length,
-    clean:   ips.filter(ip => ip.status === 'clean').length,
+    suspicious: ips.filter(ip => ip.status === 'suspicious').length,
+    allowed: ips.filter(ip => ip.status === 'allowed').length,
   }
 
   return (
     <div className="page">
-      {/* Summary Bar */}
+
       <div className="page-stats-bar">
+
         <div className="mini-stat">
           <Shield size={15} className="text-danger" />
-          <span><strong className="text-danger">{counts.blocked}</strong> Blocked</span>
+          <span>
+            <strong className="text-danger">{counts.blocked}</strong> Blocked
+          </span>
         </div>
+
         <div className="mini-stat">
           <AlertTriangle size={15} className="text-warning" />
-          <span><strong className="text-warning">{counts.flagged}</strong> Flagged</span>
+          <span>
+            <strong className="text-warning">{counts.suspicious}</strong> Suspicious
+          </span>
         </div>
+
         <div className="mini-stat">
           <CheckCircle size={15} className="text-success" />
-          <span><strong className="text-success">{counts.clean}</strong> Clean</span>
+          <span>
+            <strong className="text-success">{counts.allowed}</strong> Allowed
+          </span>
         </div>
+
       </div>
 
-      {/* Table Card */}
       <div className="card">
+
         <div className="card-header">
+
           <div className="filter-tabs">
-            {['all', 'blocked', 'flagged', 'clean'].map(f => (
+
+            {['all', 'blocked', 'suspicious', 'allowed'].map(f => (
+
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={`filter-tab ${filter === f ? 'filter-tab-active' : ''}`}
               >
+
                 {f.charAt(0).toUpperCase() + f.slice(1)}
-                <span className="tab-count">{counts[f]}</span>
+
+                <span className="tab-count">
+                  {counts[f] || 0}
+                </span>
+
               </button>
+
             ))}
+
           </div>
+
           <div className="search-box">
+
             <Search size={14} />
+
             <input
               type="text"
               placeholder="Search IP or country…"
@@ -76,11 +146,15 @@ function IPManagement() {
               onChange={e => setSearch(e.target.value)}
               className="search-input"
             />
+
           </div>
+
         </div>
 
         <div className="table-wrapper">
+
           <table className="data-table">
+
             <thead>
               <tr>
                 <th>IP Address</th>
@@ -93,51 +167,78 @@ function IPManagement() {
                 <th>Action</th>
               </tr>
             </thead>
+
             <tbody>
+
               {filtered.map(ip => (
+
                 <tr key={ip.id}>
+
                   <td className="mono">{ip.ip}</td>
+
                   <td>{ip.country}</td>
+
                   <td>{ip.requests.toLocaleString()}</td>
+
                   <td className={ip.failedLogins > 100 ? 'text-danger' : ''}>
                     {ip.failedLogins}
                   </td>
+
                   <td>
                     <span className={`badge badge-${threatColor[ip.threat]}`}>
                       {ip.threat}
                     </span>
                   </td>
+
                   <td>
                     <span className={`badge badge-${statusColor[ip.status]}`}>
                       {ip.status}
                     </span>
                   </td>
-                  <td className="muted">{ip.lastSeen}</td>
+
+                  <td className="muted">
+                    {ip.lastSeen}
+                  </td>
+
                   <td>
+
                     <button
-                      onClick={() => toggleBlock(ip.id)}
+                      onClick={() => toggleBlock(ip)}
                       className={`action-btn ${ip.status === 'blocked' ? 'btn-unblock' : 'btn-block'}`}
                     >
+
                       {ip.status === 'blocked' ? (
                         <><ShieldOff size={12} /> Unblock</>
                       ) : (
                         <><Shield size={12} /> Block</>
                       )}
+
                     </button>
+
                   </td>
+
                 </tr>
+
               ))}
+
               {filtered.length === 0 && (
+
                 <tr>
                   <td colSpan={8} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
                     No IPs match the current filter.
                   </td>
                 </tr>
+
               )}
+
             </tbody>
+
           </table>
+
         </div>
+
       </div>
+
     </div>
   )
 }
