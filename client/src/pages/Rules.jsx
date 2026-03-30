@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Zap, Shield, AlertTriangle, Bell } from 'lucide-react'
-// import { rulesData as initialRules } from '../data/mockData'
+import { rulesData as initialRules } from '../data/mockData'
 
 const actionConfig = {
   throttle: { color: 'warning', Icon: Zap,           label: 'Throttle' },
